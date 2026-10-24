@@ -1,0 +1,98 @@
+
+@model IEnumerable<SharePlate.Models.Donation>
+
+@{
+    ViewData["Title"] = "Food Donations";
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+        <h1 class="fw-bold">SharePlate</h1>
+        <p class="text-muted">Food surplus and donation management</p>
+    </div>
+    <a asp-action="Create" class="btn btn-success btn-lg">
+        + Add Donation
+    </a>
+</div>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show">
+        @TempData["Success"]
+        <button type="button" class="btn-close"
+                data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<form method="get" asp-action="Index"
+      class="row g-2 align-items-end mb-4">
+    <div class="col-sm-6 col-md-4">
+        <label for="status" class="form-label">Filter by status</label>
+        <select id="status" name="status" class="form-select">
+            <option value="All">All donations</option>
+            <option value="Available">Available</option>
+            <option value="Reserved">Reserved</option>
+            <option value="Picked Up">Picked Up</option>
+            <option value="Completed">Completed</option>
+        </select>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-outline-success">Apply Filter</button>
+    </div>
+</form>
+
+<div class="table-responsive bg-white rounded shadow-sm">
+    <table class="table table-hover align-middle mb-0">
+        <thead class="table-success">
+            <tr>
+                <th>Food</th>
+                <th>Quantity</th>
+                <th>Donor</th>
+                <th>Pickup location</th>
+                <th>Deadline</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="fw-semibold">@item.FoodName</td>
+                <td>@item.Quantity meals</td>
+                <td>@item.DonorName</td>
+                <td>@item.PickupLocation</td>
+                <td>@item.PickupDeadline.ToString("dd MMM yyyy, hh:mm tt")</td>
+                <td><span class="badge text-bg-success">@item.Status</span></td>
+                <td>
+                    <div class="d-flex flex-wrap gap-1">
+                        <a asp-action="Details" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-primary">View</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-success">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-outline-danger">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info mt-3">
+        No donations found. Add a donation to get started.
+    </div>
+}
+
+@section Scripts {
+    <script>
+        const selected = @Html.Raw(
+            System.Text.Json.JsonSerializer.Serialize(
+                ViewBag.SelectedStatus ?? "All"));
+        document.getElementById("status").value = selected;
+    </script>
+}
+

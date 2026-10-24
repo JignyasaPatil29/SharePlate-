@@ -1,0 +1,41 @@
+
+@model SharePlate.Models.Donation
+
+@{
+    ViewData["Title"] = "Donation Details";
+}
+
+<h1>Donation Details</h1>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-4">
+        <h3>@Model.FoodName</h3>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-4">Quantity</dt>
+            <dd class="col-sm-8">@Model.Quantity meals</dd>
+
+            <dt class="col-sm-4">Donor</dt>
+            <dd class="col-sm-8">@Model.DonorName</dd>
+
+            <dt class="col-sm-4">Pickup Location</dt>
+            <dd class="col-sm-8">@Model.PickupLocation</dd>
+
+            <dt class="col-sm-4">Pickup Deadline</dt>
+            <dd class="col-sm-8">@Model.PickupDeadline.ToString("f")</dd>
+
+            <dt class="col-sm-4">Status</dt>
+            <dd class="col-sm-8">@Model.Status</dd>
+
+            <dt class="col-sm-4">Description</dt>
+            <dd class="col-sm-8">@(Model.Description ?? "No description")</dd>
+
+            <dt class="col-sm-4">Created At (UTC)</dt>
+            <dd class="col-sm-8">@Model.CreatedAt.ToString("f")</dd>
+        </dl>
+
+        <a asp-action="Edit" asp-route-id="@Model.Id"
+           class="btn btn-success">Edit</a>
+        <a asp-action="Index" class="btn btn-secondary">Back</a>
+    </div>
+</div>
